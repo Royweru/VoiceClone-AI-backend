@@ -1,0 +1,37 @@
+           # Transcribe with Whisper
+            # try:
+            #     logger.info(f"Starting transcription for file: {path}")
+                
+            #     # Verify file exists before transcription
+            #     if not os.path.exists(path):
+            #         logger.error(f"File does not exist at path: {path}")
+            #         sample.status = VoiceSample.SampleStatus.INVALID
+            #         sample.save()
+            #         return {'valid': False, 'reason': 'File not found for transcription'}
+                
+            #     # Convert path to absolute path and normalize
+            #     abs_path = os.path.abspath(path)
+            #     logger.info(f"Using absolute path for transcription: {abs_path}")
+                
+            #     # For Windows, ensure proper path format
+            #     if os.name == 'nt':  # Windows
+            #         abs_path = abs_path.replace('/', '\\')
+                
+            #     transcription_result = self.whisper_model.transcribe(abs_path)
+            #     transcription = transcription_result["text"].strip()
+            #     sample.transcription = transcription
+                
+            #     logger.info(f"Transcription completed: {transcription}")
+                
+            # except Exception as e:
+            #     logger.error(f"Transcription error for {path}: {str(e)}")
+            #     logger.error(f"File exists: {os.path.exists(path)}")
+            #     logger.error(f"File size: {os.path.getsize(path) if os.path.exists(path) else 'N/A'}")
+            #     sample.status = VoiceSample.SampleStatus.INVALID
+            #     sample.save()
+            #     return {'valid': False, 'reason': f'Transcription error: {str(e)}'}
+            
+            # if len(transcription) < 10:  # Too short transcription
+            #     sample.status = VoiceSample.SampleStatus.INVALID
+            #     sample.save()
+            #     return {'valid': False, 'reason': f'Transcription too short ({len(transcription)} chars)'}

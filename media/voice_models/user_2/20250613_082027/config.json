@@ -1,0 +1,16 @@
+{
+  "user_id": 2,
+  "model_type": "xtts_v2",
+  "reference_samples": [
+    "media\\voice_models\\user_2\\20250613_082027\\dataset\\audio_0000.wav",
+    "media\\voice_models\\user_2\\20250613_082027\\dataset\\audio_0001.wav",
+    "media\\voice_models\\user_2\\20250613_082027\\dataset\\audio_0002.wav",
+    "media\\voice_models\\user_2\\20250613_082027\\dataset\\audio_0003.wav",
+    "media\\voice_models\\user_2\\20250613_082027\\dataset\\audio_0004.wav"
+  ],
+  "created_at": "2025-06-13T08:24:24.777078",
+  "language": "en",
+  "test_output": "media\\voice_models\\user_2\\20250613_082027\\test_failed.txt",
+  "sample_rate": 22050,
+  "test_success": false
+}

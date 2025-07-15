@@ -1,0 +1,51 @@
+trainer = VoiceTrainer()
+        result = trainer.train_voice_model(user_id)
+        
+        if result.get('success'):
+            # Create voice model record with current timestamp
+            voice_model = VoiceModel.objects.create(
+                user_id=user_id,
+                model_path=result['model_path'],
+                config_path=result.get('config_path', ''),
+                status=VoiceModel.TrainingStatus.COMPLETED,
+                sample_count=result['sample_count'],
+                completed_at=timezone.now(),
+                is_active=True
+            )
+            
+            # Deactivate other models for this user
+            VoiceModel.objects.filter(
+                user_id=user_id,
+                is_active=True
+            ).exclude(id=voice_model.id).update(is_active=False)
+            
+            # Update task record
+            task_record.status = VoiceModel.TrainingStatus.COMPLETED
+            task_record.voice_model = voice_model
+            task_record.progress = 100
+            task_record.save()
+            
+            logger.info(f"Training completed for user {user_id}")
+            return {'success': True, 'model_id': voice_model.id}
+        else:
+            raise Exception("Training failed without exception")
+        
+    except Exception as e:
+        logger.error(f"Training failed for user {user_id}: {str(e)}", exc_info=True)
+        
+        # Update task record with failure
+        if task_record:
+            task_record.status = VoiceModel.TrainingStatus.FAILED
+            task_record.error_message = str(e)[:500]  # Limit error message length
+            task_record.save()
+        
+        # Create failed model record for debugging
+        VoiceModel.objects.create(
+            user_id=user_id,
+            model_path='',
+            status=VoiceModel.TrainingStatus.FAILED,
+            error_message=str(e)[:500],
+            completed_at=timezone.now()
+        )
+        
+        raise self.retry(exc=e, countdown=60, max_retries=3)
